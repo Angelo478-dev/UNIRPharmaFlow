@@ -1,0 +1,16 @@
+@startuml
+class Pedido {
+    - nombreMedicamento : String
+    - tipo : String
+    - cantidad : int
+    - distribuidor : String
+    - sucursal : String
+}
+
+Pedido --> Distribuidor : "se realiza pedido a"
+
+class Distribuidor {
+    - nombre : String
+    - dirección : String
+}
+@enduml

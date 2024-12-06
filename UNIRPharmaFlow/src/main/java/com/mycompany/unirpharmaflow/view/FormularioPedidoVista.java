@@ -1,0 +1,484 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ */
+package com.mycompany.unirpharmaflow.view;
+
+import com.mycompany.unirpharmaflow.controller.PedidoManagementController;
+import com.mycompany.unirpharmaflow.model.Distribuidor;
+import com.mycompany.unirpharmaflow.model.Pedido;
+import java.awt.FlowLayout;
+import java.awt.HeadlessException;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
+/**
+ *
+ * @author Angelo
+ */
+public class FormularioPedidoVista extends javax.swing.JFrame {
+
+    private final PedidoManagementController control;
+    private final HistoricoVista historicoVista = new HistoricoVista();
+    private int contadorPedidos = 1;
+
+    /**
+     * Constructor principal.
+     */
+    public FormularioPedidoVista() {
+        initComponents();
+        control = new PedidoManagementController(this);
+        setTitle("Gestión de Pedidos de Medicamentos");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        pack();
+        setLayout(new FlowLayout());
+    }
+
+    public String GetNombreMedicamento() {
+        return txtNombreMedicamento.getText().trim();
+    }
+
+    public String GetTipoMedicamento() {
+        return (String) cmbTipoMedicamento.getSelectedItem();
+    }
+
+    public String GetCantidad() {
+        return txtCantidad.getText().trim();
+    }
+
+    public Distribuidor GetDistribuidorSeleccionado() {
+        String distribuidorSeleccionado = null;
+
+        if (rCofarma.isSelected()) {
+            distribuidorSeleccionado = "Cofarma";
+        } else if (rEmpsephar.isSelected()) {
+            distribuidorSeleccionado = "Empsephar";
+        } else if (rCemefar.isSelected()) {
+            distribuidorSeleccionado = "Cemefar";
+        }
+
+        // Usar un switch para obtener la dirección según el distribuidor
+        if (distribuidorSeleccionado != null) {
+            return switch (distribuidorSeleccionado) {
+                case "Cofarma" ->
+                    new Distribuidor("Cofarma", "Calle Principal 1");
+                case "Empsephar" ->
+                    new Distribuidor("Empsephar", "Calle Secundaria 2");
+                case "Cemefar" ->
+                    new Distribuidor("Cemefar", "Calle Tercera 3");
+                default ->
+                    null;
+            };
+        }
+
+        return null; // Si no hay distribuidor seleccionado
+    }
+
+    public boolean IsSucursalPrincipalSeleccionada() {
+        return chkPrincipal.isSelected();
+    }
+
+    public boolean IsSucursalSecundariaSeleccionada() {
+        return chkSecundaria.isSelected();
+    }
+
+    public void MostrarError(String error) {
+        JOptionPane.showMessageDialog(this, error, "Error", JOptionPane.ERROR_MESSAGE);
+    }
+
+    public void MostrarResumenPedido(Pedido pedido) {
+        try {
+            // Opciones de botones
+            Object[] opciones = {"Enviar", "Cancelar"};
+
+            // Crear el mensaje a mostrar
+            String mensaje = String.format(
+                    "Medicamento: %d unidades de %s %s%nDirección farmacia: %s",
+                    pedido.getCantidad(), pedido.getTipoMedicamento(), pedido.getNombreMedicamento(), pedido.getSucursal());
+            String titulo = "Pedido del distribuidor " + pedido.getDistribuidor();
+
+            // Mostrar el cuadro de diálogo con opciones
+            int opcion = JOptionPane.showOptionDialog(
+                    this, mensaje, titulo,
+                    JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE,
+                    null, opciones, opciones[0]
+            );
+
+            // Manejar la opción seleccionada
+            if (opcion == 0) {
+                int peticion = contadorPedidos++;
+                historicoVista.AgregarPedidoATabla(pedido, peticion);
+                System.out.println("\n***************************  Pedido Enviado  ***************************");
+                System.out.println(titulo + "\n" + mensaje);
+                System.out.println("***************************  Pedido Enviado  ***************************\n");
+                LimpiarPantalla();
+            }
+        } catch (HeadlessException e) {
+            MostrarError("Error al mostrar el resumen del pedido: " + e.getMessage());
+        }
+    }
+
+    public void LimpiarPantalla() {
+        txtNombreMedicamento.setText("");
+        txtCantidad.setText("");
+        jSucursal.setToolTipText("");
+        grupoDistribuidor.clearSelection();
+        cmbTipoMedicamento.setSelectedIndex(0);
+        chkPrincipal.setSelected(false);
+        chkSecundaria.setSelected(false);
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        grupoDistribuidor = new javax.swing.ButtonGroup();
+        mainPanel = new javax.swing.JPanel();
+        jTitulo = new javax.swing.JLabel();
+        jIngresoRegistro = new javax.swing.JPanel();
+        jNombreMedicament = new javax.swing.JLabel();
+        jTipoMedicament = new javax.swing.JLabel();
+        jCantidad = new javax.swing.JLabel();
+        cmbTipoMedicamento = new javax.swing.JComboBox<>();
+        txtNombreMedicamento = new javax.swing.JTextField();
+        txtCantidad = new javax.swing.JTextField();
+        jDistribuidor = new javax.swing.JPanel();
+        rCofarma = new javax.swing.JRadioButton();
+        rEmpsephar = new javax.swing.JRadioButton();
+        rCemefar = new javax.swing.JRadioButton();
+        jSucursal = new javax.swing.JPanel();
+        chkPrincipal = new javax.swing.JCheckBox();
+        chkSecundaria = new javax.swing.JCheckBox();
+        jPanel1 = new javax.swing.JPanel();
+        btnConfirmar1 = new javax.swing.JButton();
+        btnBorrar = new javax.swing.JButton();
+        btnHistorico = new javax.swing.JButton();
+        btnSalir = new javax.swing.JButton();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jTitulo.setFont(new java.awt.Font("Segoe UI", 0, 48)); // NOI18N
+        jTitulo.setText("UNIRPharmaFlow");
+
+        jNombreMedicament.setText("Nombre Medicamento:");
+
+        jTipoMedicament.setText("Tipo Medicamento:");
+
+        jCantidad.setText("Cantidad:");
+
+        cmbTipoMedicamento.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " ", "Analgésico", "Analéptico", "Anestésico", "Antiácido", "Antidepresivo", "Antibióticos" }));
+
+        txtCantidad.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtCantidadActionPerformed(evt);
+            }
+        });
+        txtCantidad.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCantidadKeyTyped(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jIngresoRegistroLayout = new javax.swing.GroupLayout(jIngresoRegistro);
+        jIngresoRegistro.setLayout(jIngresoRegistroLayout);
+        jIngresoRegistroLayout.setHorizontalGroup(
+            jIngresoRegistroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jIngresoRegistroLayout.createSequentialGroup()
+                .addGap(26, 26, 26)
+                .addGroup(jIngresoRegistroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTipoMedicament, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jNombreMedicament, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(26, 26, 26)
+                .addGroup(jIngresoRegistroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(txtCantidad)
+                    .addComponent(cmbTipoMedicamento, 0, 195, Short.MAX_VALUE)
+                    .addComponent(txtNombreMedicamento))
+                .addContainerGap(16, Short.MAX_VALUE))
+        );
+        jIngresoRegistroLayout.setVerticalGroup(
+            jIngresoRegistroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jIngresoRegistroLayout.createSequentialGroup()
+                .addGap(22, 22, 22)
+                .addGroup(jIngresoRegistroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jNombreMedicament)
+                    .addComponent(txtNombreMedicamento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(15, 15, 15)
+                .addGroup(jIngresoRegistroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cmbTipoMedicamento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTipoMedicament))
+                .addGap(18, 18, 18)
+                .addGroup(jIngresoRegistroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jCantidad))
+                .addContainerGap(29, Short.MAX_VALUE))
+        );
+
+        jDistribuidor.setBorder(javax.swing.BorderFactory.createTitledBorder("Distribuidor"));
+
+        grupoDistribuidor.add(rCofarma);
+        rCofarma.setText("Cofarma");
+
+        grupoDistribuidor.add(rEmpsephar);
+        rEmpsephar.setText("Empsephar");
+
+        grupoDistribuidor.add(rCemefar);
+        rCemefar.setText("Cemefar");
+
+        javax.swing.GroupLayout jDistribuidorLayout = new javax.swing.GroupLayout(jDistribuidor);
+        jDistribuidor.setLayout(jDistribuidorLayout);
+        jDistribuidorLayout.setHorizontalGroup(
+            jDistribuidorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jDistribuidorLayout.createSequentialGroup()
+                .addGap(24, 24, 24)
+                .addGroup(jDistribuidorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(rCemefar, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(rEmpsephar, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(rCofarma, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(38, Short.MAX_VALUE))
+        );
+        jDistribuidorLayout.setVerticalGroup(
+            jDistribuidorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jDistribuidorLayout.createSequentialGroup()
+                .addGap(21, 21, 21)
+                .addComponent(rCofarma)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(rEmpsephar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(rCemefar)
+                .addContainerGap(20, Short.MAX_VALUE))
+        );
+
+        jSucursal.setBorder(javax.swing.BorderFactory.createTitledBorder("Sucursal"));
+
+        chkPrincipal.setText("Principal");
+
+        chkSecundaria.setText("Secundaria");
+
+        javax.swing.GroupLayout jSucursalLayout = new javax.swing.GroupLayout(jSucursal);
+        jSucursal.setLayout(jSucursalLayout);
+        jSucursalLayout.setHorizontalGroup(
+            jSucursalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jSucursalLayout.createSequentialGroup()
+                .addGap(34, 34, 34)
+                .addGroup(jSucursalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(chkSecundaria, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(chkPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(34, Short.MAX_VALUE))
+        );
+        jSucursalLayout.setVerticalGroup(
+            jSucursalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jSucursalLayout.createSequentialGroup()
+                .addGap(18, 18, 18)
+                .addComponent(chkPrincipal)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(chkSecundaria)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        btnConfirmar1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        btnConfirmar1.setIcon(new javax.swing.ImageIcon("C:\\Users\\Angelo\\Downloads\\icons8-cuenta-verificada-48.png")); // NOI18N
+        btnConfirmar1.setText("Confirmar");
+        btnConfirmar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnConfirmar1ActionPerformed(evt);
+            }
+        });
+
+        btnBorrar.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        btnBorrar.setIcon(new javax.swing.ImageIcon("C:\\Users\\Angelo\\Downloads\\3808224-broomstick-fly-magic-witch_109093.png")); // NOI18N
+        btnBorrar.setText("Borrar");
+        btnBorrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBorrarActionPerformed(evt);
+            }
+        });
+
+        btnHistorico.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        btnHistorico.setIcon(new javax.swing.ImageIcon("C:\\Users\\Angelo\\Downloads\\hourglass_sanglass_timer_clock_icon_185976.png")); // NOI18N
+        btnHistorico.setText("Histórico");
+        btnHistorico.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHistoricoActionPerformed(evt);
+            }
+        });
+
+        btnSalir.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        btnSalir.setIcon(new javax.swing.ImageIcon("C:\\Users\\Angelo\\Downloads\\icons8-salir-redondeado-64.png")); // NOI18N
+        btnSalir.setText("Salir");
+        btnSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalirActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(16, 16, 16)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnBorrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnConfirmar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnHistorico, javax.swing.GroupLayout.DEFAULT_SIZE, 162, Short.MAX_VALUE)
+                    .addComponent(btnSalir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(26, 26, 26)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnConfirmar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnHistorico, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnBorrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(19, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
+        mainPanel.setLayout(mainPanelLayout);
+        mainPanelLayout.setHorizontalGroup(
+            mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(mainPanelLayout.createSequentialGroup()
+                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, mainPanelLayout.createSequentialGroup()
+                            .addGap(17, 17, 17)
+                            .addComponent(jIngresoRegistro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, mainPanelLayout.createSequentialGroup()
+                            .addGap(33, 33, 33)
+                            .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(mainPanelLayout.createSequentialGroup()
+                                    .addComponent(jDistribuidor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jSucursal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                    .addGroup(mainPanelLayout.createSequentialGroup()
+                        .addGap(45, 45, 45)
+                        .addComponent(jTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 381, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(26, Short.MAX_VALUE))
+        );
+        mainPanelLayout.setVerticalGroup(
+            mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jTitulo)
+                .addGap(27, 27, 27)
+                .addComponent(jIngresoRegistro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jDistribuidor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jSucursal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(36, 36, 36))
+        );
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(mainPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(mainPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void txtCantidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCantidadActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCantidadActionPerformed
+
+    /**
+     * Valida que solo se ingresen números en el campo de cantidad.
+     */
+    private void txtCantidadKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCantidadKeyTyped
+
+        // Obtener el carácter ingresado
+        char c = evt.getKeyChar();
+        // Definir el límite máximo de caracteres
+        int maxLength = 10; // Por ejemplo, máximo 10 caracteres
+
+        // Verificar si ya se alcanzó el límite de caracteres
+        if (txtCantidad.getText().length() >= maxLength) {
+            evt.consume(); // Cancelar el evento
+            JOptionPane.showMessageDialog(this, "Máximo " + maxLength + " caracteres permitidos.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return; // Salir del método
+        }
+
+        // Verificar si el carácter ingresado no es un número
+        if (!Character.isDigit(c)) {
+            evt.consume(); // Cancelar el evento
+            JOptionPane.showMessageDialog(this, "Por favor, ingrese solo números válidos.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_txtCantidadKeyTyped
+
+    private void btnConfirmar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmar1ActionPerformed
+
+        control.ConfirmarPedido(); 
+    }//GEN-LAST:event_btnConfirmar1ActionPerformed
+
+    private void btnHistoricoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHistoricoActionPerformed
+        try {
+            historicoVista.setLocationRelativeTo(this);
+            historicoVista.setVisible(true);
+        } catch (Exception e) {
+            MostrarError("Error al abrir el histórico: " + e.getMessage());
+        }
+    }//GEN-LAST:event_btnHistoricoActionPerformed
+
+    private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
+        try {
+            dispose();
+        } catch (Exception e) {
+            MostrarError("Error al cerrar la aplicación: " + e.getMessage());
+        }
+    }//GEN-LAST:event_btnSalirActionPerformed
+
+    private void btnBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarActionPerformed
+        try {
+            LimpiarPantalla();
+        } catch (Exception e) {
+            MostrarError("Error al limpiar pantalla: " + e.getMessage());
+        }
+    }//GEN-LAST:event_btnBorrarActionPerformed
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBorrar;
+    private javax.swing.JButton btnConfirmar1;
+    private javax.swing.JButton btnHistorico;
+    private javax.swing.JButton btnSalir;
+    private javax.swing.JCheckBox chkPrincipal;
+    private javax.swing.JCheckBox chkSecundaria;
+    private javax.swing.JComboBox<String> cmbTipoMedicamento;
+    private javax.swing.ButtonGroup grupoDistribuidor;
+    private javax.swing.JLabel jCantidad;
+    private javax.swing.JPanel jDistribuidor;
+    private javax.swing.JPanel jIngresoRegistro;
+    private javax.swing.JLabel jNombreMedicament;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jSucursal;
+    private javax.swing.JLabel jTipoMedicament;
+    private javax.swing.JLabel jTitulo;
+    private javax.swing.JPanel mainPanel;
+    private javax.swing.JRadioButton rCemefar;
+    private javax.swing.JRadioButton rCofarma;
+    private javax.swing.JRadioButton rEmpsephar;
+    private javax.swing.JTextField txtCantidad;
+    private javax.swing.JTextField txtNombreMedicamento;
+    // End of variables declaration//GEN-END:variables
+}
